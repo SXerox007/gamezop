@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package gamezoppb;
+
+import "google/api/annotations.proto";
+
+message GamezopRequest{
+    string player_name = 1;
+    string email = 2;
+}
+
+message GamezopResponse{
+    string message = 1;
+    int32 code = 2;
+    string data = 3;
+}
+
+
+service GamezopService{
+    rpc PlayGameService (GamezopRequest) returns (GamezopResponse){
+        option (google.api.http) = {
+            post: "/v1/game/gamezop"
+            body: "*"
+		};
+    }
+}
