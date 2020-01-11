@@ -22,7 +22,7 @@ make rest
 * Kafka on localhost:9092
 
 
-* CURL:
+## CURL:
 
 ```
 curl -X POST -k http://localhost:5051/v1/game/gamezop -d '{"player_name":"test","email":"test@gmail.com"}'
