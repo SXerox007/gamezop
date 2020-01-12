@@ -15,6 +15,8 @@ message GamezopResponse{
     string data = 3;
 }
 
+message Empty {
+}
 
 service GamezopService{
     rpc PlayGameService (GamezopRequest) returns (GamezopResponse){
@@ -22,5 +24,12 @@ service GamezopService{
             post: "/v1/game/gamezop"
             body: "*"
 		};
-    }
+    };
+
+     // Get all players details
+     rpc GetPlayersDetailsService(Empty) returns (GamezopResponse){
+        option (google.api.http) = {
+            get: "/v1/game/gamezop"
+		};
+    };
 }

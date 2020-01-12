@@ -3,12 +3,16 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"gamezop/db/mongodb"
 	"gamezop/db/redis"
 	"gamezop/kafka"
 	"gamezop/protos"
 	"net/http"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Server struct {
@@ -49,4 +53,40 @@ func (*Server) PlayGameService(ctx context.Context, in *gamezoppb.GamezopRequest
 		}, nil
 	}
 
+}
+
+type GamezopPlayers struct {
+	Id         string `json:"user_id,omitempty"`
+	PlayerName string `json:"player_name,omitempty"`
+	Email      string `json:"email,omitempty"`
+}
+
+// get all players details
+func (*Server) GetPlayersDetailsService(ctx context.Context, in *gamezoppb.Empty) (*gamezoppb.GamezopResponse, error) {
+	//get all players info from mongodb
+	res, err := mongodb.CreateCollection("all_players").Find(context.Background(), nil)
+	if err != nil {
+		return &gamezoppb.GamezopResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Something went wrong.",
+		}, err
+	} else {
+		var items []GamezopPlayers
+		for res.Next(nil) {
+			item := GamezopPlayers{}
+			if err := res.Decode(&item); err != nil {
+				return nil, status.Errorf(
+					codes.Aborted,
+					fmt.Sprintln("Data can't decode.", err))
+			}
+			//items = append(items, &item)
+			items = append(items, item)
+		}
+		data, _ := json.Marshal(items)
+		return &gamezoppb.GamezopResponse{
+			Code:    http.StatusOK,
+			Message: "Success.",
+			Data:    string(data),
+		}, nil
+	}
 }

@@ -24,6 +24,12 @@ make rest
 
 ## CURL:
 
+### POST player info
 ```
 curl -X POST -k http://localhost:5051/v1/game/gamezop -d '{"player_name":"test","email":"test@gmail.com"}'
+```
+
+### GET players info
+```
+curl -X GET http://localhost:5051/v1/game/gamezop
 ```

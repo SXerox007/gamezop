@@ -45,6 +45,15 @@ func request_GamezopService_PlayGameService_0(ctx context.Context, marshaler run
 
 }
 
+func request_GamezopService_GetPlayersDetailsService_0(ctx context.Context, marshaler runtime.Marshaler, client GamezopServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq Empty
+	var metadata runtime.ServerMetadata
+
+	msg, err := client.GetPlayersDetailsService(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
 // RegisterGamezopServiceHandlerFromEndpoint is same as RegisterGamezopServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterGamezopServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
@@ -103,13 +112,37 @@ func RegisterGamezopServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
+	mux.Handle("GET", pattern_GamezopService_GetPlayersDetailsService_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_GamezopService_GetPlayersDetailsService_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_GamezopService_GetPlayersDetailsService_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
 var (
 	pattern_GamezopService_PlayGameService_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "game", "gamezop"}, ""))
+
+	pattern_GamezopService_GetPlayersDetailsService_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "game", "gamezop"}, ""))
 )
 
 var (
 	forward_GamezopService_PlayGameService_0 = runtime.ForwardResponseMessage
+
+	forward_GamezopService_GetPlayersDetailsService_0 = runtime.ForwardResponseMessage
 )

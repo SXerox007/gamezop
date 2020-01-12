@@ -36,6 +36,7 @@ func ExposePoint(address string, opts ...runtime.ServeMuxOption) error {
 		return err
 	}
 	grpcMux := http.NewServeMux()
+	grpcMux.Handle("/", mux)
 	log.Println("Starting Endpoint Exposed Server: localhost:5051")
 	http.ListenAndServe(address, grpcMux)
 	return nil

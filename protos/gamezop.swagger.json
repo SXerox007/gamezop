@@ -16,6 +16,21 @@
   ],
   "paths": {
     "/v1/game/gamezop": {
+      "get": {
+        "summary": "Get all players details",
+        "operationId": "GetPlayersDetailsService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/gamezoppbGamezopResponse"
+            }
+          }
+        },
+        "tags": [
+          "GamezopService"
+        ]
+      },
       "post": {
         "operationId": "PlayGameService",
         "responses": {
